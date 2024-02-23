@@ -69,13 +69,25 @@ class _LoginPageState extends TbPageState<LoginPage> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Row(children: [
-                                tbContext.wlService.loginLogoImage != null
-                                    ? tbContext.wlService.loginLogoImage!
-                                    : SizedBox(height: 25)
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center, // căn giữa theo chiều ngang
+                                  children: [
+                                  tbContext.wlService.loginLogoImage != null
+                                    ? Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    color: Colors.black, // Background color
+                                  ),
+                                  padding: EdgeInsets.all(8),
+                                  height: 100 / 2 ,
+                                  alignment: Alignment.center, // căn giữa theo chiều dọc
+                                  child: tbContext.wlService
+                                      .loginLogoImage!,
+                                )
+                                    : SizedBox(height: 20)
                               ]),
                               if (tbContext.wlService.loginShowNameVersion ==
-                                      true &&
+                                  true &&
                                   !(tbContext.wlService.showNameBottom == true))
                                 Text(tbContext.wlService.platformNameAndVersion,
                                     style: TextStyle(fontSize: 12, height: 2)),
@@ -94,7 +106,7 @@ class _LoginPageState extends TbPageState<LoginPage> {
                               if (tbContext.hasOAuthClients)
                                 Padding(
                                     padding:
-                                        EdgeInsets.only(top: 10, bottom: 16),
+                                    EdgeInsets.only(top: 10, bottom: 16),
                                     child: Row(
                                       children: [
                                         Flexible(child: Divider()),
@@ -111,30 +123,30 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                   autovalidateMode: AutovalidateMode.disabled,
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
+                                    CrossAxisAlignment.stretch,
                                     children: [
                                       FormBuilderTextField(
                                         name: 'username',
                                         keyboardType:
-                                            TextInputType.emailAddress,
+                                        TextInputType.emailAddress,
                                         validator:
-                                            FormBuilderValidators.compose([
+                                        FormBuilderValidators.compose([
                                           FormBuilderValidators.required(
                                               errorText:
-                                                  '${S.of(context).emailRequireText}'),
+                                              '${S.of(context).emailRequireText}'),
                                           FormBuilderValidators.email(
                                               errorText:
-                                                  '${S.of(context).emailInvalidText}')
+                                              '${S.of(context).emailInvalidText}')
                                         ]),
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(),
                                             labelText:
-                                                '${S.of(context).email}'),
+                                            '${S.of(context).email}'),
                                       ),
                                       SizedBox(height: 28),
                                       ValueListenableBuilder(
                                           valueListenable:
-                                              _showPasswordNotifier,
+                                          _showPasswordNotifier,
                                           builder: (BuildContext context,
                                               bool showPassword, child) {
                                             return FormBuilderTextField(
@@ -144,7 +156,7 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                                   .compose([
                                                 FormBuilderValidators.required(
                                                     errorText:
-                                                        '${S.of(context).passwordRequireText}')
+                                                    '${S.of(context).passwordRequireText}')
                                               ]),
                                               decoration: InputDecoration(
                                                   suffixIcon: IconButton(
@@ -153,14 +165,14 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                                         : Icons.visibility_off),
                                                     onPressed: () {
                                                       _showPasswordNotifier
-                                                              .value =
-                                                          !_showPasswordNotifier
-                                                              .value;
+                                                          .value =
+                                                      !_showPasswordNotifier
+                                                          .value;
                                                     },
                                                   ),
                                                   border: OutlineInputBorder(),
                                                   labelText:
-                                                      '${S.of(context).password}'),
+                                                  '${S.of(context).password}'),
                                             );
                                           })
                                     ],
@@ -189,8 +201,11 @@ class _LoginPageState extends TbPageState<LoginPage> {
                               ElevatedButton(
                                 child: Text('${S.of(context).login}'),
                                 style: ElevatedButton.styleFrom(
+                                    primary: Colors.black, // Thay đổi màu nền của nút
+                                    onPrimary: Colors.white, // Thay đổi màu chữ của nút
                                     padding:
-                                        EdgeInsets.symmetric(vertical: 16)),
+                                    EdgeInsets.symmetric(vertical: 16)),
+
                                 onPressed: () {
                                   _login();
                                 },
@@ -202,7 +217,7 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: [
                                         Text('${S.of(context).newUserText}',
                                             style: TextStyle(
@@ -227,7 +242,7 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                   ],
                                 ),
                               if (tbContext.wlService.loginShowNameVersion ==
-                                      true &&
+                                  true &&
                                   tbContext.wlService.showNameBottom == true)
                                 Column(
                                   children: [
@@ -245,11 +260,11 @@ class _LoginPageState extends TbPageState<LoginPage> {
                                   ],
                                 ),
                               if (tbContext.wlService.loginShowNameVersion !=
-                                      true ||
+                                  true ||
                                   tbContext.wlService.showNameBottom != true)
                                 SizedBox(
                                     height:
-                                        tbContext.hasSelfRegistration ? 20 : 48)
+                                    tbContext.hasSelfRegistration ? 20 : 48)
                             ]),
                       )));
             },
@@ -265,14 +280,14 @@ class _LoginPageState extends TbPageState<LoginPage> {
                       child: ClipRect(
                           child: BackdropFilter(
                               filter:
-                                  ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                              ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                               child: Container(
                                 decoration: new BoxDecoration(
                                     color:
-                                        Colors.grey.shade200.withOpacity(0.2)),
+                                    Colors.grey.shade200.withOpacity(0.2)),
                                 child: Container(
                                   padding:
-                                      EdgeInsets.only(bottom: bottomPadding),
+                                  EdgeInsets.only(bottom: bottomPadding),
                                   alignment: Alignment.center,
                                   child: TbProgressIndicator(tbContext,
                                       size: 50.0),
@@ -292,9 +307,9 @@ class _LoginPageState extends TbPageState<LoginPage> {
           children: clients
               .asMap()
               .map((index, client) => MapEntry(
-                  index,
-                  _buildOAuth2Button(client, 'Login with ${client.name}', false,
-                      index == clients.length - 1)))
+              index,
+              _buildOAuth2Button(client, 'Login with ${client.name}', false,
+                  index == clients.length - 1)))
               .values
               .toList());
     } else {
@@ -309,12 +324,12 @@ class _LoginPageState extends TbPageState<LoginPage> {
               children: clients
                   .asMap()
                   .map((index, client) => MapEntry(
-                      index,
-                      _buildOAuth2Button(
-                          client,
-                          clients.length == 2 ? client.name : null,
-                          true,
-                          index == clients.length - 1)))
+                  index,
+                  _buildOAuth2Button(
+                      client,
+                      clients.length == 2 ? client.name : null,
+                      true,
+                      index == clients.length - 1)))
                   .values
                   .toList())
         ],
@@ -368,9 +383,9 @@ class _LoginPageState extends TbPageState<LoginPage> {
     if (expand) {
       return Expanded(
           child: Padding(
-        padding: EdgeInsets.only(right: isLast ? 0 : 8),
-        child: button,
-      ));
+            padding: EdgeInsets.only(right: isLast ? 0 : 8),
+            child: button,
+          ));
     } else {
       return Padding(
         padding: EdgeInsets.only(bottom: isLast ? 0 : 8),
@@ -407,10 +422,6 @@ class _LoginPageState extends TbPageState<LoginPage> {
         await tbClient.login(LoginRequest(username, password));
       } catch (e) {
         _isLoginNotifier.value = false;
-        if (!(e is ThingsboardError) ||
-            e.errorCode == ThingsBoardErrorCode.general) {
-          await tbContext.onFatalError(e);
-        }
       }
     }
   }

@@ -11,19 +11,21 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  thingsboard_pe_client: 1.0.9
+  thingsboard_pe_client: 1.0.8
   intl: ^0.18.1
   flutter_secure_storage: ^9.0.0
   flutter_speed_dial: ^7.0.0
   cupertino_icons: ^1.0.6
   fluro: ^2.0.5
   flutter_svg: ^2.0.9
-  jovial_svg: ^1.1.19
   auto_size_text: ^3.0.0-nullsafety.0
   infinite_scroll_pagination: ^4.0.0
   fading_edge_scrollview: ^4.0.0
   stream_transform: ^2.1.0
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview:
+    git:
+      url: https://github.com/rshrc/flutter_inappwebview
+      ref: master
 #  flutter_downloader: ^1.6.0
 #  permission_handler: ^8.0.0+2
 #  path_provider: ^2.0.2
@@ -85,7 +87,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_icons:
-  android: "launcher_icon"
+  android: true
   ios: true
   remove_alpha_ios: true
   image_path: "assets/images/thingsboard.png"

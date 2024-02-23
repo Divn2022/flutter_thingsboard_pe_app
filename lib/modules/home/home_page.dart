@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thingsboard_app/constants/assets_path.dart';
 import 'package:thingsboard_app/core/context/tb_context.dart';
 import 'package:thingsboard_app/core/context/tb_context_widget.dart';
 import 'package:thingsboard_app/modules/dashboard/dashboard.dart'
@@ -7,6 +8,7 @@ import 'package:thingsboard_app/modules/dashboard/dashboards_grid.dart';
 import 'package:thingsboard_app/modules/tenant/tenants_widget.dart';
 import 'package:thingsboard_app/widgets/tb_app_bar.dart';
 import 'package:thingsboard_pe_client/thingsboard_client.dart';
+
 
 class HomePage extends TbContextWidget {
   HomePage(TbContext tbContext) : super(tbContext);
@@ -38,15 +40,23 @@ class _HomePageState extends TbContextState<HomePage>
     var homeDashboard = tbContext.homeDashboard;
     var dashboardState = homeDashboard != null;
     return Scaffold(
+      //backgroundColor: Colors.blue, // Thay đổi màu nền của phần head
       appBar: TbAppBar(
         tbContext,
         elevation: dashboardState ? 0 : 8,
         title: Center(
             child: Container(
-                height: kToolbarHeight - 8,
+                // decoration: BoxDecoration(
+                //   borderRadius: BorderRadius.circular(8),
+                //   color: Colors.black, // Background color
+                // ),
+                //color: Colors.blue,
+                height: 3 * kToolbarHeight / 4,
                 child: tbContext.wlService.userLogoImage != null
                     ? tbContext.wlService.userLogoImage!
-                    : SizedBox())),
+                    : SizedBox()
+            )
+        ),
         actions: [
           if (tbClient.isSystemAdmin())
             IconButton(

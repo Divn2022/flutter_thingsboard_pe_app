@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:fluro/fluro.dart';
@@ -100,7 +99,7 @@ abstract class TbMainDashboardHolder {
   Future<bool> dashboardGoBack();
 }
 
-class TbContext implements PopEntry {
+class TbContext {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   bool _initialized = false;
   bool isUserLoaded = false;
@@ -122,9 +121,6 @@ class TbContext implements PopEntry {
 
   TbMainDashboardHolder? _mainDashboardHolder;
   bool _closeMainFirst = false;
-
-  final ValueNotifier<bool> canPopNotifier = ValueNotifier<bool>(false);
-  PopInvokedCallback get onPopInvoked => onPopInvokedImpl;
 
   GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -199,7 +195,6 @@ class TbContext implements PopEntry {
       }
     } catch (e, s) {
       log.error('Failed to init tbContext: $e', e, s);
-      await onFatalError(e);
     }
   }
 
@@ -215,15 +210,6 @@ class TbContext implements PopEntry {
 
   void setMainDashboardHolder(TbMainDashboardHolder holder) {
     _mainDashboardHolder = holder;
-  }
-
-  Future<void> onFatalError(e) async {
-    var message = e is ThingsboardError
-        ? (e.message ?? 'Unknown error.')
-        : 'Unknown error.';
-    message = 'Fatal application error occured:\n' + message + '.';
-    await alert(title: 'Fatal error', message: message, ok: 'Close');
-    tbClient.logout();
   }
 
   void onError(ThingsboardError tbError) {
@@ -577,22 +563,6 @@ class TbContext implements PopEntry {
     return true;
   }
 
-  void onPopInvokedImpl(bool didPop) async {
-    if (didPop) {
-      return;
-    }
-    if (await willPop()) {
-      if (await currentState!.willPop()) {
-        var navigator = Navigator.of(currentState!.context);
-        if (navigator.canPop()) {
-          navigator.pop();
-        } else {
-          SystemNavigator.pop();
-        }
-      }
-    }
-  }
-
   Future<bool> closeMainIfNeeded() async {
     if (currentState != null) {
       if (currentState!.closeMainFirst && _mainDashboardHolder != null) {
@@ -601,19 +571,6 @@ class TbContext implements PopEntry {
       }
     }
     return false;
-  }
-
-  Future<void> alert(
-      {required String title, required String message, String ok = 'Ok'}) {
-    return showDialog<bool>(
-        context: currentState!.context,
-        builder: (context) => AlertDialog(
-              title: Text(title),
-              content: Text(message),
-              actions: [
-                TextButton(onPressed: () => pop(null, context), child: Text(ok))
-              ],
-            ));
   }
 
   Future<bool?> confirm(
@@ -645,14 +602,12 @@ mixin HasTbContext {
   void setupCurrentState(TbContextState currentState) {
     if (_tbContext.currentState != null) {
       // ignore: deprecated_member_use
-      ModalRoute.of(_tbContext.currentState!.context)
-          ?.unregisterPopEntry(_tbContext);
+      ModalRoute.of(_tbContext.currentState!.context)?.removeScopedWillPopCallback(_tbContext.willPop);
     }
     _tbContext.currentState = currentState;
     if (_tbContext.currentState != null) {
       // ignore: deprecated_member_use
-      ModalRoute.of(_tbContext.currentState!.context)
-          ?.registerPopEntry(_tbContext);
+      ModalRoute.of(_tbContext.currentState!.context)?.addScopedWillPopCallback(_tbContext.willPop);
     }
     if (_tbContext._closeMainFirst) {
       _tbContext._closeMainFirst = false;

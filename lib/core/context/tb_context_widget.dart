@@ -35,10 +35,6 @@ abstract class TbContextState<T extends TbContextWidget> extends State<T>
   void dispose() {
     super.dispose();
   }
-
-  Future<bool> willPop() async {
-    return true;
-  }
 }
 
 mixin TbMainState {
